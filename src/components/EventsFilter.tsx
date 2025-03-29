@@ -16,6 +16,7 @@ const EventsFilter = () => {
               <option>Comedy</option>
               <option>Conferences</option>
               <option>Exhibitions</option>
+              <option>Educational</option>
             </select>
           </div>
           <div className="relative">
