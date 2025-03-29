@@ -47,8 +47,7 @@ const Hero = () => {
   return (
     <div className="relative h-screen">
       <Swiper
-        modules={[Navigation, Pagination, Autoplay]}
-        navigation
+        modules={[Pagination, Autoplay]}
         pagination={{ clickable: true }}
         autoplay={{ delay: 5000 }}
         loop={true}
