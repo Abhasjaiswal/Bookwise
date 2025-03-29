@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { User, Mail, Lock, Eye, EyeOff } from 'lucide-react';
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import { User, Mail, Lock, Eye, EyeOff } from "lucide-react";
 
 const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -10,14 +10,19 @@ const Signup = () => {
       <div className="bg-[#111111] p-8 rounded-lg shadow-xl w-full max-w-md">
         <div className="text-center mb-8">
           <h2 className="text-3xl font-bold mb-2">Create Account</h2>
-          <p className="text-gray-400">Join Live Nation and never miss an event</p>
+          <p className="text-gray-400">Join BOOKWISE and never miss an event</p>
         </div>
 
         <form className="space-y-6">
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">Full Name</label>
+            <label className="block text-sm font-medium text-gray-300 mb-2">
+              Full Name
+            </label>
             <div className="relative">
-              <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+              <User
+                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                size={20}
+              />
               <input
                 type="text"
                 className="w-full bg-[#222222] text-white pl-12 pr-4 py-3 rounded-md focus:outline-none focus:ring-2 focus:ring-[#FF0033]"
@@ -27,9 +32,14 @@ const Signup = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">Email Address</label>
+            <label className="block text-sm font-medium text-gray-300 mb-2">
+              Email Address
+            </label>
             <div className="relative">
-              <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+              <Mail
+                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                size={20}
+              />
               <input
                 type="email"
                 className="w-full bg-[#222222] text-white pl-12 pr-4 py-3 rounded-md focus:outline-none focus:ring-2 focus:ring-[#FF0033]"
@@ -39,9 +49,14 @@ const Signup = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">Password</label>
+            <label className="block text-sm font-medium text-gray-300 mb-2">
+              Password
+            </label>
             <div className="relative">
-              <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+              <Lock
+                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                size={20}
+              />
               <input
                 type={showPassword ? "text" : "password"}
                 className="w-full bg-[#222222] text-white pl-12 pr-12 py-3 rounded-md focus:outline-none focus:ring-2 focus:ring-[#FF0033]"
@@ -64,11 +79,11 @@ const Signup = () => {
               className="h-4 w-4 rounded border-gray-300 text-[#FF0033] focus:ring-[#FF0033]"
             />
             <label htmlFor="terms" className="ml-2 block text-sm text-gray-300">
-              I agree to the{' '}
+              I agree to the{" "}
               <Link to="/" className="text-[#FF0033] hover:text-[#cc0029]">
                 Terms of Service
-              </Link>{' '}
-              and{' '}
+              </Link>{" "}
+              and{" "}
               <Link to="/" className="text-[#FF0033] hover:text-[#cc0029]">
                 Privacy Policy
               </Link>
@@ -84,14 +99,18 @@ const Signup = () => {
         </form>
 
         <p className="mt-6 text-center text-gray-400">
-          Already have an account?{' '}
-          <Link to="/login" className="text-[#FF0033] hover:text-[#cc0029] font-semibold">
+          Already have an account?{" "}
+          <Link
+            to="/login"
+            className="text-[#FF0033] hover:text-[#cc0029] font-semibold"
+          >
             Sign in
           </Link>
         </p>
       </div>
     </div>
   );
-}
+};
 
 export default Signup;
+
