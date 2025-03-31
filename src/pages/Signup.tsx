@@ -1,10 +1,36 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { User, Mail, Lock, Eye, EyeOff } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [formData, setFormData] = useState({
+    fullname: "",
+    email: "",
+    password: "",
+  });
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post(
+        "http://localhost:8000/api/v1/users/register",
+        formData,
+      );
+      console.log(response.data);
+      navigate("/");
+      window.alert("Signup successful");
+    } catch (err) {
+      setError(err.response?.data?.message || "Signup failed");
+    }
+  };
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-black to-[#1A1A1A] px-4">
       <div className="bg-[#111111] p-8 rounded-lg shadow-xl w-full max-w-md">
@@ -13,7 +39,7 @@ const Signup = () => {
           <p className="text-gray-400">Join BOOKWISE and never miss an event</p>
         </div>
 
-        <form className="space-y-6">
+        <form className="space-y-6" onSubmit={handleSubmit}>
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-2">
               Full Name
@@ -25,12 +51,14 @@ const Signup = () => {
               />
               <input
                 type="text"
+                name="fullname"
+                value={formData.fullname}
+                onChange={handleChange}
                 className="w-full bg-[#222222] text-white pl-12 pr-4 py-3 rounded-md focus:outline-none focus:ring-2 focus:ring-[#FF0033]"
                 placeholder="Enter your full name"
               />
             </div>
           </div>
-
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-2">
               Email Address
@@ -42,12 +70,14 @@ const Signup = () => {
               />
               <input
                 type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
                 className="w-full bg-[#222222] text-white pl-12 pr-4 py-3 rounded-md focus:outline-none focus:ring-2 focus:ring-[#FF0033]"
                 placeholder="Enter your email"
               />
             </div>
           </div>
-
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-2">
               Password
@@ -59,6 +89,9 @@ const Signup = () => {
               />
               <input
                 type={showPassword ? "text" : "password"}
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
                 className="w-full bg-[#222222] text-white pl-12 pr-12 py-3 rounded-md focus:outline-none focus:ring-2 focus:ring-[#FF0033]"
                 placeholder="Create a password"
               />
@@ -113,4 +146,3 @@ const Signup = () => {
 };
 
 export default Signup;
-

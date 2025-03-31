@@ -1,9 +1,35 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Mail, Lock, Eye, EyeOff } from "lucide-react";
+import axios from "axios";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post(
+        "http://localhost:8000/api/v1/users/login",
+        formData,
+      );
+      console.log(response.data);
+      navigate("/");
+      window.alert("Login successful");
+    } catch (err) {
+      setError(err.response?.data?.message || "Login failed");
+    }
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-black to-[#1A1A1A] px-4">
@@ -13,7 +39,9 @@ const Login = () => {
           <p className="text-gray-400">Sign in to continue to BOOKWISE</p>
         </div>
 
-        <form className="space-y-6">
+        {error && <p className="text-red-500 text-center">{error}</p>}
+
+        <form className="space-y-6" onSubmit={handleSubmit}>
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-2">
               Email Address
@@ -25,6 +53,9 @@ const Login = () => {
               />
               <input
                 type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
                 className="w-full bg-[#222222] text-white pl-12 pr-4 py-3 rounded-md focus:outline-none focus:ring-2 focus:ring-[#FF0033]"
                 placeholder="Enter your email"
               />
@@ -42,6 +73,9 @@ const Login = () => {
               />
               <input
                 type={showPassword ? "text" : "password"}
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
                 className="w-full bg-[#222222] text-white pl-12 pr-12 py-3 rounded-md focus:outline-none focus:ring-2 focus:ring-[#FF0033]"
                 placeholder="Enter your password"
               />
@@ -100,4 +134,3 @@ const Login = () => {
 };
 
 export default Login;
-
