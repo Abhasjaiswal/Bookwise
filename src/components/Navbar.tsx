@@ -1,161 +1,138 @@
-import React, { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
-import { Globe, Search, Menu, X } from "lucide-react";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import { MapPin, Search, Globe, Menu, X } from "lucide-react";
 
-const Navbar = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
-  const location = useLocation();
+interface LocationData {
+  city: string;
+  state: string;
+  latitude: number;
+  longitude: number;
+  nearbyMajorCity?: string;
+}
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 0);
-    };
+interface NavbarProps {
+  selectedLocation: LocationData | null;
+  onLocationClick: () => void;
+}
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+const Navbar: React.FC<NavbarProps> = ({
+  selectedLocation,
+  onLocationClick,
+}) => {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const displayLocation = selectedLocation
+    ? `${selectedLocation.city}${selectedLocation.nearbyMajorCity ? ` & ${selectedLocation.nearbyMajorCity}` : ""}`
+    : "Select Location";
 
   return (
-    <nav
-      className={`fixed w-full z-50 transition-all duration-300 ${
-        isScrolled ? "bg-black shadow-lg" : "bg-transparent"
-      }`}
-    >
+    <nav className="bg-[#1A1A1A] fixed w-full z-50 shadow-lg">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-20">
-          <Link
-            to="/"
-            className="text-2xl font-bold text-white flex items-center"
-          >
-            BOOKWISE
-          </Link>
+          {/* Logo */}
+          <div className="flex items-center">
+            <Link
+              to="/"
+              className="text-3xl font-bold text-white tracking-tight hover:text-[#FF0033] transition-colors"
+            >
+              BOOKWISE
+            </Link>
+          </div>
+
+          <div className="hidden md:flex items-center flex-1 mx-8">
+            <div className="relative flex-1 max-w-2xl group">
+              <Search
+                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 group-focus-within:text-[#FF0033] transition-colors"
+                size={20}
+              />
+              <input
+                type="text"
+                placeholder="Search for events, venues, or artists"
+                className="w-full pl-10 pr-4 py-3 bg-[#242424] border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-[#FF0033] focus:ring-1 focus:ring-[#FF0033] transition-all"
+              />
+            </div>
+          </div>
+
+          <div className="hidden md:flex items-center space-x-6">
+            <button
+              onClick={onLocationClick}
+              className="flex items-center space-x-2 text-gray-300 hover:text-white group px-3 py-2 rounded-lg hover:bg-[#242424] transition-all"
+            >
+              <MapPin
+                size={20}
+                className="text-[#FF0033] group-hover:scale-110 transition-transform"
+              />
+              <span className="text-sm font-medium">{displayLocation}</span>
+            </button>
+
+            <button className="text-gray-300 hover:text-white p-2 rounded-lg hover:bg-[#242424] transition-all">
+              <Globe
+                size={20}
+                className="hover:rotate-180 transition-transform duration-500"
+              />
+            </button>
+
+            <Link
+              to="/login"
+              className="px-6 py-2.5 text-sm font-semibold text-white bg-[#FF0033] rounded-lg hover:bg-[#cc0029] transform hover:scale-105 transition-all"
+            >
+              Sign In
+            </Link>
+          </div>
 
           <button
-            className="md:hidden text-white"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="md:hidden text-gray-300 hover:text-white p-2"
           >
-            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
-
-          <div className="hidden md:flex items-center justify-between flex-1 ml-8">
-            <div className="flex items-center space-x-8">
-              <Link
-                to="/"
-                className="text-white hover:text-[#FF0033] transition-colors"
-              >
-                Sports
-              </Link>
-              <Link
-                to="/"
-                className="text-white hover:text-[#FF0033] transition-colors"
-              >
-                Concerts
-              </Link>
-              <Link
-                to="/"
-                className="text-white hover:text-[#FF0033] transition-colors"
-              >
-                Theater
-              </Link>
-              <Link
-                to="/"
-                className="text-white hover:text-[#FF0033] transition-colors"
-              >
-                Conferences
-              </Link>
-              <Link
-                to="/"
-                className="text-white hover:text-[#FF0033] transition-colors"
-              >
-                Exhibitions
-              </Link>
-            </div>
-            <div className="flex items-center space-x-6">
-              <Search className="w-6 h-6 text-white cursor-pointer hover:text-[#FF0033] transition-colors" />
-              <Globe className="w-6 h-6 text-white cursor-pointer hover:text-[#FF0033] transition-colors" />
-              {location.pathname !== "/login" &&
-                location.pathname !== "/signup" && (
-                  <div className="flex items-center space-x-4">
-                    <Link
-                      to="/login"
-                      className="text-white hover:text-[#FF0033] transition-colors"
-                    >
-                      Log In
-                    </Link>
-                    <Link
-                      to="/signup"
-                      className="bg-[#FF0033] text-white px-6 py-2 rounded-md hover:bg-[#cc0029] transition-colors"
-                    >
-                      Sign Up
-                    </Link>
-                  </div>
-                )}
-            </div>
-          </div>
         </div>
 
-        <div
-          className={`md:hidden ${isMenuOpen ? "block" : "hidden"} mt-4 pb-4`}
-        >
-          <div className="flex flex-col space-y-4">
-            <Link
-              to="/"
-              className="text-white hover:text-[#FF0033] transition-colors"
-            >
-              Sports
-            </Link>
-            <Link
-              to="/"
-              className="text-white hover:text-[#FF0033] transition-colors"
-            >
-              Concerts
-            </Link>
-            <Link
-              to="/"
-              className="text-white hover:text-[#FF0033] transition-colors"
-            >
-              Theater
-            </Link>
-            <Link
-              to="/"
-              className="text-white hover:text-[#FF0033] transition-colors"
-            >
-              Conferences
-            </Link>
-            <Link
-              to="/"
-              className="text-white hover:text-[#FF0033] transition-colors"
-            >
-              Exhibitions
-            </Link>
-            <div className="flex items-center space-x-4 pt-4 border-t border-gray-800">
-              <Search className="w-6 h-6 text-white cursor-pointer" />
-              <Globe className="w-6 h-6 text-white cursor-pointer" />
-              {location.pathname !== "/login" &&
-                location.pathname !== "/signup" && (
-                  <div className="flex flex-col space-y-2">
-                    <Link
-                      to="/login"
-                      className="text-white hover:text-[#FF0033] transition-colors"
-                    >
-                      Log In
-                    </Link>
-                    <Link
-                      to="/signup"
-                      className="bg-[#FF0033] text-white px-6 py-2 rounded-md text-center"
-                    >
-                      Sign Up
-                    </Link>
-                  </div>
-                )}
+        {isMobileMenuOpen && (
+          <div className="md:hidden bg-[#1A1A1A] border-t border-gray-800 py-4">
+            <div className="px-2 space-y-4">
+              {/* Mobile Search */}
+              <div className="relative">
+                <Search
+                  className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                  size={20}
+                />
+                <input
+                  type="text"
+                  placeholder="Search events..."
+                  className="w-full pl-10 pr-4 py-2 bg-[#242424] border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-[#FF0033]"
+                />
+              </div>
+
+              <button
+                onClick={() => {
+                  onLocationClick();
+                  setIsMobileMenuOpen(false);
+                }}
+                className="flex items-center space-x-2 w-full px-4 py-2 text-gray-300 hover:text-white hover:bg-[#242424] rounded-lg transition-colors"
+              >
+                <MapPin size={20} className="text-[#FF0033]" />
+                <span className="text-sm font-medium">{displayLocation}</span>
+              </button>
+
+              <button className="flex items-center space-x-2 w-full px-4 py-2 text-gray-300 hover:text-white hover:bg-[#242424] rounded-lg transition-colors">
+                <Globe size={20} />
+                <span className="text-sm font-medium">Language</span>
+              </button>
+
+              <Link
+                to="/login"
+                className="block text-center px-4 py-2 text-sm font-medium text-white bg-[#FF0033] rounded-lg hover:bg-[#cc0029] transition-colors"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Sign In
+              </Link>
             </div>
           </div>
-        </div>
+        )}
       </div>
     </nav>
   );
 };
 
 export default Navbar;
-
